@@ -147,12 +147,15 @@ namespace HistoryBrowser
                 mainForm.BackColor = Color.Black;
                 mainForm.ForeColor = Color.White;
 
-                mainForm.Dgv_history.EnableHeadersVisualStyles = false;
-                mainForm.Dgv_history.ColumnHeadersDefaultCellStyle.BackColor = Color.Black;
-                mainForm.Dgv_history.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                mainForm.Dgv_historys.EnableHeadersVisualStyles = false;
+                mainForm.Dgv_historys.ColumnHeadersDefaultCellStyle.BackColor =
+                mainForm.Dgv_historys.RowsDefaultCellStyle.BackColor = Color.Black;
 
-                mainForm.Dgv_history.RowsDefaultCellStyle.BackColor = Color.Black;
-                mainForm.Dgv_history.GridColor = Color.Pink;
+                mainForm.Dgv_historys.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                mainForm.panel1.BackColor = Color.Black;
+
+                //= Color.Black;
+                mainForm.Dgv_historys.GridColor = Color.Pink;
 
                 mainForm.menuStrip1.BackColor = Color.Black;
                 mainForm.menuStrip1.ForeColor = Color.White;
@@ -169,12 +172,15 @@ namespace HistoryBrowser
                 mainForm.BackColor = Color.Gray;
                 mainForm.ForeColor = Color.Black;
 
-                mainForm.Dgv_history.EnableHeadersVisualStyles = false;
-                mainForm.Dgv_history.ColumnHeadersDefaultCellStyle.BackColor = Color.Gray;
-                mainForm.Dgv_history.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                mainForm.Dgv_historys.EnableHeadersVisualStyles = false;
+                mainForm.Dgv_historys.ColumnHeadersDefaultCellStyle.BackColor =
+                mainForm.Dgv_historys.RowsDefaultCellStyle.BackColor = Color.Gray;
+                mainForm.Dgv_historys.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
 
-                mainForm.Dgv_history.RowsDefaultCellStyle.BackColor = Color.Gray;
-                mainForm.Dgv_history.GridColor = Color.Black;
+                mainForm.panel1.BackColor = Color.Gray;
+
+                //= Color.Gray;
+                mainForm.Dgv_historys.GridColor = Color.Black;
 
                 mainForm.menuStrip1.BackColor = Color.Gray;
                 mainForm.menuStrip1.ForeColor = Color.Black;

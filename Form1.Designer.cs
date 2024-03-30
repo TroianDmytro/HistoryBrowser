@@ -28,31 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Dgv_history = new DataGridView();
             menuStrip1 = new MenuStrip();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             Btn_refresh = new Button();
             panel1 = new Panel();
             Lb_loading = new Label();
-            ((System.ComponentModel.ISupportInitialize)Dgv_history).BeginInit();
             menuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
-            // 
-            // Dgv_history
-            // 
-            Dgv_history.AllowUserToAddRows = false;
-            Dgv_history.AllowUserToDeleteRows = false;
-            Dgv_history.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            Dgv_history.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            Dgv_history.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            Dgv_history.Location = new Point(598, 104);
-            Dgv_history.Name = "Dgv_history";
-            Dgv_history.RowHeadersVisible = false;
-            Dgv_history.RowHeadersWidth = 51;
-            Dgv_history.Size = new Size(168, 422);
-            Dgv_history.TabIndex = 0;
-            Dgv_history.CellContentClick += Dgv_history_CellContentClick;
             // 
             // menuStrip1
             // 
@@ -60,7 +43,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 28);
+            menuStrip1.Size = new Size(1227, 28);
             menuStrip1.TabIndex = 2;
             menuStrip1.Text = "menuStrip1";
             menuStrip1.ItemClicked += menuStrip1_ItemClicked;
@@ -77,7 +60,7 @@
             Btn_refresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Btn_refresh.BackgroundImage = HistoryBrowser.Properties.Resources.png_transparent_computer_icons_computer_software_refresh_icon_text_business_rim;
             Btn_refresh.BackgroundImageLayout = ImageLayout.Zoom;
-            Btn_refresh.Location = new Point(749, 31);
+            Btn_refresh.Location = new Point(1176, 31);
             Btn_refresh.Name = "Btn_refresh";
             Btn_refresh.Size = new Size(39, 38);
             Btn_refresh.TabIndex = 3;
@@ -108,10 +91,9 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1227, 450);
             Controls.Add(panel1);
             Controls.Add(Btn_refresh);
-            Controls.Add(Dgv_history);
             Controls.Add(menuStrip1);
             Name = "Form1";
             ShowIcon = false;
@@ -119,7 +101,6 @@
             Text = "Form1";
             WindowState = FormWindowState.Maximized;
             Load += Form1_Load;
-            ((System.ComponentModel.ISupportInitialize)Dgv_history).EndInit();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             panel1.ResumeLayout(false);
@@ -130,11 +111,10 @@
 
         #endregion
 
-        public DataGridView Dgv_history;
         public MenuStrip menuStrip1;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private Button Btn_refresh;
-        private Panel panel1;
-        private Label Lb_loading;
+        public Panel panel1;
+        public Label Lb_loading;
     }
 }

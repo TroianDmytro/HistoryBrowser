@@ -10,15 +10,22 @@ namespace WinFormsApp1
     {
         DatabaseHelper databaseHelper;
         List<MyData> listHistory;
+        public DataGridView Dgv_historys;
 
         public Form1()
         {
             InitializeComponent();
 
             listHistory = new List<MyData>();
+
+            CreateDgv_history();
+
             SettingsForm settingsForm = new SettingsForm(this);
             settingsForm.DarkTreme(settingsForm.IsDarkTremeChecked());
             settingsForm.OpenWindowInFullScreen(settingsForm.IsOpenWindowInFullScreen());
+
+            panel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -26,31 +33,42 @@ namespace WinFormsApp1
             LicenseManager licenseManager = new LicenseManager();
             var b = licenseManager.ValidateLicense();
             this.Text = $"HistoryBrowser {"trial version " + licenseManager.numberOfDaysTrialVersion}";
-
-            //Task.Run(ReadHistory);
-            //Thread thread = new Thread(ReadHistory);
-            //thread.Start();
+            
             ReadHistory();
-
         }
 
+        // сворює datagridview
         void CreateDgv_history()
         {
-            DataGridView dataGridView = new DataGridView();
-            panel1.Controls.Add(dataGridView);
+            Dgv_historys = new DataGridView();
+            Dgv_historys.Name = "Dgv_historys";
+            Dgv_historys.AllowUserToAddRows = false;
+            Dgv_historys.RowHeadersVisible = false;
+            panel1.Controls.Add(Dgv_historys);
+            Dgv_historys.Dock = DockStyle.Fill;
+            Dgv_historys.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            Dgv_historys.Click += Dgv_historys_Click;
+        }
+
+        //при кліку переходе по посиланню
+        private void Dgv_historys_Click(object? sender, EventArgs e)
+        {
+            int ind = Dgv_historys.CurrentCell.RowIndex;
+            Thread thread = new Thread(() => Process.Start(new ProcessStartInfo("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", $"{Dgv_historys.Rows[ind].Cells[1].Value}")));
+            thread.Start();
         }
 
         //считування історії Chrom
         private async void ReadHistory()
         {
-            await Task.Run(() =>
+            await Task.Run((Action)(() =>
             {
+                Task.Delay(2000);
                 databaseHelper = new DatabaseHelper(@"C:\Users\troya\AppData\Local\Google\Chrome\User Data\Default\History");
                 listHistory = databaseHelper.GetMyData();
 
-                //Dgv_history.DataSource = listHistory.ToArray();
-                Dgv_history.Invoke(()=> Dgv_history.Columns.Add("CountVisit", "Count visit"));
-                Dgv_history.Invoke(()=> Dgv_history.Columns.Add("url", "url"));
+                this.Dgv_historys.Invoke<int>((Func<int>)(()=> (int)this.Dgv_historys.Columns.Add("CountVisit", "Count visit")));
+                this.Dgv_historys.Invoke<int>((Func<int>)(()=> (int)this.Dgv_historys.Columns.Add("url", "url")));
 
                 for (int i = 0; i < listHistory.Count; i++)
                 {
@@ -59,50 +77,21 @@ namespace WinFormsApp1
 
                     string[] row = [listHistory[i].visit_count.ToString(), listHistory[i].top_level_url];
 
-                    //Dgv_history.Rows[i].Cells[0].Value = listHistory[i].visit_count;
-                    //Dgv_history.Rows[i].Cells[1].Value = listHistory[i].top_level_url;
-                    Dgv_history.Invoke(() => Dgv_history.Rows.Add(row));
+                    this.Dgv_historys.Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Rows.Add(row)));
 
-                    //if (i % 20 == 0)
-                    //{
-                    //    Dgv_history.Refresh();
-                    //}
                 }
-            });
-            //databaseHelper = new DatabaseHelper(@"C:\Users\troya\AppData\Local\Google\Chrome\User Data\Default\History");
-            //listHistory = databaseHelper.GetMyData();
-
-            //Action action = () =>
-            //{
-            //    //Dgv_history.DataSource = listHistory.ToArray();
-            //    Dgv_history.Columns.Add("CountVisit", "Count visit");
-            //    Dgv_history.Columns.Add("url", "url");
-
-            //    for (int i = 0; i < listHistory.Count; i++)
-            //    {
-            //        if (listHistory == null)
-            //            continue;
-
-            //        Dgv_history.Rows.Add();
-            //        Dgv_history.Rows[i].Cells[0].Value = listHistory[i].visit_count;
-            //        Dgv_history.Rows[i].Cells[1].Value = listHistory[i].top_level_url;
-
-            //        if (i % 20 == 0)
-            //        {
-            //            Dgv_history.Refresh();
-            //        }
-            //    }
-            //};
-            //Invoke(action);
-            
-            
+                Invoke(() =>
+                {
+                    Lb_loading.Visible = false;
+                    Lb_loading.Enabled = false;
+                });
+            }));
         }
 
         // відкривае посилання в Chrom
         private void Dgv_history_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            Thread thread = new Thread(() => Process.Start(new ProcessStartInfo("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", $"{Dgv_history.Rows[e.RowIndex].Cells[e.ColumnIndex].Value}")));
-            thread.Start();
+           
         }
 
 
@@ -113,10 +102,17 @@ namespace WinFormsApp1
 
         }
 
-        //Оновлюе значення Dgv_history
+        //Оновлюе значення Dgv_historys
         private async void Btn_refresh_Click(object sender, EventArgs e)
         {
-            Dgv_history.Refresh();
+            Dgv_historys.Rows.Clear();
+            Dgv_historys.Columns.Clear();
+
+            Lb_loading.Visible = true;
+            Lb_loading.ForeColor = Color.White;
+
+            ReadHistory();
+            Dgv_historys.Refresh();
         }
 
 

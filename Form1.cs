@@ -11,6 +11,7 @@ namespace WinFormsApp1
         DatabaseHelper databaseHelper;
         List<MyData> listHistory;
         public DataGridView Dgv_historys;
+        string domain;
 
         public Form1()
         {
@@ -33,7 +34,7 @@ namespace WinFormsApp1
             LicenseManager licenseManager = new LicenseManager();
             var b = licenseManager.ValidateLicense();
             this.Text = $"HistoryBrowser {"trial version " + licenseManager.numberOfDaysTrialVersion}";
-            
+
             ReadHistory();
         }
 
@@ -63,27 +64,31 @@ namespace WinFormsApp1
         {
             await Task.Run((Action)(() =>
             {
-                Task.Delay(2000);
+                Invoke(() => Btn_enterSearsnDomain.Enabled = false);
                 databaseHelper = new DatabaseHelper(@"C:\Users\troya\AppData\Local\Google\Chrome\User Data\Default\History");
                 listHistory = databaseHelper.GetMyData();
 
-                this.Dgv_historys.Invoke<int>((Func<int>)(()=> (int)this.Dgv_historys.Columns.Add("CountVisit", "Count visit")));
-                this.Dgv_historys.Invoke<int>((Func<int>)(()=> (int)this.Dgv_historys.Columns.Add("url", "url")));
+                FillingDgv_historys(listHistory);
+                //this.Dgv_historys.Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Columns.Add("CountVisit", "Count visit")));
+                //this.Dgv_historys.Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Columns.Add("url", "url")));
 
-                for (int i = 0; i < listHistory.Count; i++)
-                {
-                    if (listHistory == null)
-                        continue;
+                //for (int i = 0; i < listHistory.Count; i++)
+                //{
+                //    if (listHistory == null)
+                //        continue;
 
-                    string[] row = [listHistory[i].visit_count.ToString(), listHistory[i].top_level_url];
+                //    string[] row = [listHistory[i].visit_count.ToString(), listHistory[i].top_level_url];
 
-                    this.Dgv_historys.Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Rows.Add(row)));
+                //    this.Dgv_historys.Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Rows.Add(row)));
 
-                }
+                //}
+                Task.Delay(2000);
+
                 Invoke(() =>
                 {
                     Lb_loading.Visible = false;
                     Lb_loading.Enabled = false;
+                    Btn_enterSearsnDomain.Enabled = true;
                 });
             }));
         }
@@ -91,7 +96,7 @@ namespace WinFormsApp1
         // відкривае посилання в Chrom
         private void Dgv_history_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-           
+
         }
 
 
@@ -115,10 +120,89 @@ namespace WinFormsApp1
             Dgv_historys.Refresh();
         }
 
-
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        //обробляє натисканя на кнопку Enter
+        private void Btn_enterSearsnDomain_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(Tb_searchDomain.Text))
+            {
+                return;
+            }
+
+            domain = Tb_searchDomain.Text;
+
+            List<MyData> searchDomainList = new List<MyData>();
+            searchDomainList = listHistory
+                .Where(x => EqualsDomain(domain, x.top_level_url))
+                .Select(x => x)
+                .ToList();
+
+            FillingDgv_historys(searchDomainList);
+
+            Tb_searchDomain.Text = string.Empty;
+
+        }
+
+        //Заповнює Dgv_historys значеннями зі списку переданого як параметр
+        async void FillingDgv_historys(List<MyData> list)
+        {
+            await Task.Run(() =>
+            {
+                Invoke(() =>
+                {
+                    Dgv_historys.Rows.Clear();
+                    Dgv_historys.Columns.Clear();
+                });
+
+                this.Dgv_historys
+                .Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Columns.Add("CountVisit", "Count visit")));
+                this.Dgv_historys
+                .Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Columns.Add("url", "url")));
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list == null)
+                        continue;
+
+                    string[] row = [list[i].visit_count.ToString(), list[i].top_level_url];
+
+                    this.Dgv_historys.Invoke<int>((Func<int>)(() => (int)this.Dgv_historys.Rows.Add(row)));
+                }
+            });
+        }
+
+
+        // порівнює параметр dom з параметром url.
+        // Якщо в url домен співпадає з dom повертае true
+        bool EqualsDomain(string dom, string url)
+        {
+            string str = url
+                .Replace("https://", "")
+                .Split('/')
+                .First()
+                .Replace("www.", "")
+                .Split('.')
+                .First();
+
+            if (dom.Equals(str))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // обробник натискання клавиши Enter в полі Tb_searchDomain
+        private void Tb_searchDomain_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar ==(char)Keys.Enter)
+            {
+                Btn_enterSearsnDomain_Click(sender, e);
+            }
         }
     }
 }

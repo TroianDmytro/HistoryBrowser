@@ -54,9 +54,13 @@ namespace WinFormsApp1
         //при кліку переходе по посиланню
         private void Dgv_historys_Click(object? sender, EventArgs e)
         {
-            int ind = Dgv_historys.CurrentCell.RowIndex;
-            Thread thread = new Thread(() => Process.Start(new ProcessStartInfo("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", $"{Dgv_historys.Rows[ind].Cells[1].Value}")));
-            thread.Start();
+            DialogResult result = MessageBox.Show("Хочете відкрити у Chrom?","",MessageBoxButtons.YesNo);
+            if (result == DialogResult.OK)
+            {
+                int ind = Dgv_historys.CurrentCell.RowIndex;
+                Thread thread = new Thread(() => Process.Start(new ProcessStartInfo("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", $"{Dgv_historys.Rows[ind].Cells[1].Value}")));
+                thread.Start();
+            }
         }
 
         //считування історії Chrom

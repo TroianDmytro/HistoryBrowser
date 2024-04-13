@@ -94,6 +94,7 @@
             // 
             // Lb_searchDomain
             // 
+            Lb_searchDomain.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Lb_searchDomain.AutoSize = true;
             Lb_searchDomain.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             Lb_searchDomain.Location = new Point(676, 48);
@@ -104,6 +105,7 @@
             // 
             // Tb_searchDomain
             // 
+            Tb_searchDomain.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Tb_searchDomain.Location = new Point(676, 79);
             Tb_searchDomain.Name = "Tb_searchDomain";
             Tb_searchDomain.Size = new Size(350, 27);
@@ -112,6 +114,7 @@
             // 
             // Btn_enterSearsnDomain
             // 
+            Btn_enterSearsnDomain.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Btn_enterSearsnDomain.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             Btn_enterSearsnDomain.Location = new Point(948, 112);
             Btn_enterSearsnDomain.Name = "Btn_enterSearsnDomain";
